@@ -9,9 +9,6 @@ Vue.use(uView)
 Vue.prototype.baseUrl = 'https://nongmai.beetry.com/img/'
 App.mpType = 'app'
 
-let mpShare = require('uview-ui/libs/mixin/mpShare.js');
-Vue.mixin(mpShare)
-
 const app = new Vue({
     ...App
 })
