@@ -71,8 +71,9 @@
 				</view>
 				<view class="grid u-flex u-flex-wrap u-row-between">
 					<view class="main" v-for="item in listData">
-						<view>
+						<view class="u-relative">
 							<u-image width="100%" height="218rpx" :src="src"></u-image>
+							<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;"><u-icon name="heart"></u-icon></view>
 						</view>
 						<view class="dese">
 							整套公寓*2室1卫2床

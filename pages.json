@@ -6,38 +6,42 @@
 		{
 			"path": "pages/search/search",
 			"style": {
-				"navigationBarTitleText": "uni-app",
+				"navigationBarTitleText": "首页",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/wishList/wishList",
 			"style": {
-				"navigationBarTitleText": "心愿单"
+				"navigationBarTitleText": "心愿单",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/registered",
 			"style": {
-				"navigationBarTitleText": "注册"
+				"navigationBarTitleText": "注册",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarTitleText": "登录"
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
 			}
 		}
 	],
 	"tabBar": {
 		"color": "#B1B1B1",
-		"selectedColor": "#B1B1B1",
+		"selectedColor": "#ef5964",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{
