@@ -1,11 +1,16 @@
 <template>
 	<view class="wrap">
-		<view class="topName">
-			<view class="name">
-				手机用户5600
+		<view class="u-flex u-row-between">
+			<view class="topName">
+				<view class="name">
+					手机用户5600
+				</view>
+				<view class="phone">
+					15880315600
+				</view>
 			</view>
-			<view class="phone">
-				15880315600
+			<view style="color: #18B566;" @click="jump('../login/login')">
+				立即登录
 			</view>
 		</view>
 		<view class="orderList">

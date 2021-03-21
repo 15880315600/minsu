@@ -52,6 +52,20 @@
 				"navigationBarTitleText": "订单详情",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/search/roomList",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/search/roomDetails",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {

@@ -30,7 +30,7 @@
 							</view>
 						</u-form-item>
 					</u-form>
-					<view class="btn">
+					<view class="btn" @click="jump('./roomList')">
 						搜索房源
 					</view>
 					<view class="dese u-flex u-row-between">
@@ -70,10 +70,12 @@
 					<view class="dese">新客专享低价 好房低至7折</view>
 				</view>
 				<view class="grid u-flex u-flex-wrap u-row-between">
-					<view class="main" v-for="item in listData">
+					<view class="main" v-for="item in listData"@click="jump('./roomDetails')">
 						<view class="u-relative">
 							<u-image width="100%" height="218rpx" :src="src"></u-image>
-							<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;"><u-icon name="heart"></u-icon></view>
+							<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
+								<u-icon name="heart"></u-icon>
+							</view>
 						</view>
 						<view class="dese">
 							整套公寓*2室1卫2床
@@ -145,7 +147,11 @@
 
 		},
 		methods: {
-
+			jump(url) {
+				uni.navigateTo({
+					url: url
+				})
+			},
 		}
 	}
 </script>
@@ -170,13 +176,13 @@
 				width: 100%;
 
 				margin-bottom: 24rpx;
-				border-radius: 18px;
-				border: 1px solid #ebeef5;
+				border-radius: 18rpx;
+				border: 1rpx solid #ebeef5;
 				background-color: #fff;
 				overflow: hidden;
 				color: #303133;
 				transition: .3s;
-				box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2);
+				box-shadow: 0 2rpx 12rpx 0 rgba(0, 0, 0, .2);
 
 				.top {
 					background: #e2e2e2;

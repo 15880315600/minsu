@@ -54,7 +54,7 @@
 				<view class="label">订单号</view>
 				<view>488481521841251551</view>
 			</view>
-			
+
 		</view>
 		<view class="bottom u-flex u-row-right">
 			<view class="btn">
@@ -69,37 +69,9 @@
 		data() {
 			return {
 				src: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-				status: 'loadmore',
-				listQuery: {
-					page: 1,
-					pageSize: 10
-				},
-				total: 15,
-				listData: 10
+				listQuery: {},
+				listData: {}
 			}
-		},
-		onReachBottom() {
-			let str = Math.ceil(this.total / 10)
-			if (this.listQuery.page >= str) {
-				this.status = 'nomore'
-				return
-			}
-			this.status = 'loading';
-			this.listQuery.page = ++this.listQuery.page;
-			this.listData += 10
-			// this.$u.api.cartList(this.listQuery).then(res => {
-			// 	let cardList = res.result.records
-			// 	let arr = []
-			// 	cardList.forEach((item, index) => {
-			// 		item.productAttrs = JSON.parse(item.productAttr)
-			// 		let spDatas = Object.values(item.productAttrs)
-			// 		item.spData = spDatas.toString()
-			// 		item.checked = false
-			// 		arr.push(item)
-			// 	})
-			// 	this.cardList = this.cardList.concat(arr)
-			// })
-
 		},
 		onLoad() {
 
@@ -197,18 +169,19 @@
 					line-height: 40rpx;
 				}
 			}
-			
+
 		}
-		.bottom{
+
+		.bottom {
 			position: fixed;
 			bottom: 0;
 			width: 100%;
 			height: 100rpx;
-			padding:0 28rpx;
+			padding: 0 28rpx;
 			background: #FFFFFF;
 			border: 1rpx solid #EEEEEE;
-			
-			.btn{
+
+			.btn {
 				padding: 10rpx 28rpx;
 				border-radius: 50rpx;
 				font-size: 24rpx;
