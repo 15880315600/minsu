@@ -3,10 +3,10 @@
 		<view class="u-flex u-row-between">
 			<view class="topName">
 				<view class="name">
-					手机用户5600
+					手机用户8888
 				</view>
 				<view class="phone">
-					15880315600
+					18888888888
 				</view>
 			</view>
 			<view style="color: #18B566;" @click="jump('../login/login')">

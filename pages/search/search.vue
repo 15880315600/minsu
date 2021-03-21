@@ -224,7 +224,7 @@
 
 					.text-area {
 						color: #787878;
-						font-size: 24rpx;
+						font-size: 18rpx;
 						line-height: 68rpx;
 					}
 				}
@@ -253,7 +253,7 @@
 						.dese {
 							margin-top: 18rpx;
 							color: #997a64;
-							font-size: 24rpx;
+							font-size: 18rpx;
 							line-height: 40rpx;
 						}
 
