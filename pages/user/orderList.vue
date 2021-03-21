@@ -1,5 +1,6 @@
 <template>
 	<view class="wrap">
+		<view style="height: 44rpx;"></view>
 		<view class="topBack" @click="back('./user')">
 			<u-icon name="arrow-leftward" color="#333333" size="38"></u-icon>
 		</view>

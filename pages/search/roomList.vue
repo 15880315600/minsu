@@ -1,5 +1,6 @@
 <template>
 	<view class="wrap">
+		<view style="height: 44rpx;"></view>
 		<view class="topSearch">
 			<view class="u-flex">
 				<view class="u-flex-4" style="border-right: 4rpx solid #f1f1f1;margin-right: 28rpx;">

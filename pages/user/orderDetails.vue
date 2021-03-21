@@ -104,7 +104,7 @@
 
 			.topBack {
 				left: 28rpx;
-				top: 28rpx;
+				top: 68rpx;
 			}
 		}
 

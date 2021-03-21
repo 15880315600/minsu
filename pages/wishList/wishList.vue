@@ -1,5 +1,6 @@
 <template>
 	<view class="wrap">
+		<view style="height: 44rpx;"></view>
 		<view class="title">
 			心愿单
 		</view>
