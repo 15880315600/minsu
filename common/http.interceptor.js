@@ -4,7 +4,7 @@
 const install = (Vue, vm) => {
 	// 此为自定义配置参数，具体参数见上方说明
 	Vue.prototype.$u.http.setConfig({
-		baseUrl: 'https://nongmai.beetry.com/api/',
+		baseUrl: '/api',
 		// baseUrl:'http://192.168.2.168:9008',
 		loadingText: '努力加载中~',
 		loadingTime: 800,

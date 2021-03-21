@@ -6,7 +6,7 @@ import uView from "uview-ui"
 Vue.use(uView)
 
 // Vue.prototype.baseUrl = 'http://192.168.2.168/img/'
-Vue.prototype.baseUrl = 'https://nongmai.beetry.com/img/'
+Vue.prototype.baseUrl = 'http://101.37.253.98/img/'
 App.mpType = 'app'
 
 const app = new Vue({

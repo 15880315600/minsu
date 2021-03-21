@@ -2,13 +2,11 @@ module.exports = {
 	devServer: {
 		proxy: {
 			'/api': {
-				target: 'http://192.168.2.11:8004',
-				// target: 'https://gym.beetry.com',
-				// target: 'https://jsf.ziqisun.com',
+				target: 'http://101.37.253.98/',
 				// changeOrigin: true,
 				// secure: true,
 				pathRewrite: {
-					'^/api': ''
+					'^/api': '/api'
 				}
 			}
 		},

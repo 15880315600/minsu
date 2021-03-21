@@ -1,9 +1,10 @@
 // /common/http.api.js
 
 //登录
-let codeUrl = '/user_info/enter';
+let codeUrl = '/user_info/get_code';
 let loginUrl = '/user_info/login';
-let getUserInfoUrl = '/user_info/get_account_info';
+let registerUrl = '/user_info/register';
+let getUserInfoUrl = '/user_info';
 //登录
 
 
@@ -15,6 +16,7 @@ const install = (Vue, vm) => {
 	//登录
 	let getCode = (params = {}) => vm.$u.post(codeUrl, params);
 	let login = (params = {}) => vm.$u.post(loginUrl, params);
+	let register = (params = {}) => vm.$u.post(registerUrl, params);
 	let getUserInfo = (params = {}) => vm.$u.get(getUserInfoUrl, params);
 	//登录
 
@@ -22,6 +24,7 @@ const install = (Vue, vm) => {
 	vm.$u.api = {
 		getCode,
 		login,
+		register,
 		getUserInfo
 	};
 }
