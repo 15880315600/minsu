@@ -37,6 +37,21 @@
 				"navigationBarTitleText": "登录",
 				"navigationStyle": "custom"
 			}
+		},
+		
+		{
+			"path": "pages/user/orderList",
+			"style": {
+				"navigationBarTitleText": "订单列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/orderDetails",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {

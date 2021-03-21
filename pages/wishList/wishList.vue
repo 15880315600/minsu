@@ -11,7 +11,7 @@
 				<view class="u-relative u-flex-2" style="margin-right: 18rpx;">
 					<u-image width="100%" height="148rpx" :src="src" border-radius="10"></u-image>
 					<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
-						<u-icon name="heart" color="#ef5964"></u-icon>
+						<u-icon name="heart" color="#008489"></u-icon>
 					</view>
 				</view>
 				<view class="u-flex-5">

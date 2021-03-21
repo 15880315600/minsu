@@ -114,14 +114,14 @@ export default {
     margin: 32rpx auto;
     font-size: 24rpx;
     font-weight: 400;
-    color: #ef5964;
+    color: #008489;
     line-height: 32rpx;
   }
 
   .login {
     width: 100%;
     height: 76rpx;
-    background: #ef5964;
+    background: #008489;
     font-size: 28rpx;
     font-weight: 600;
     color: #FFFFFF;
@@ -131,7 +131,7 @@ export default {
   .register {
     font-size: 24rpx;
     font-weight: 400;
-    color: #ef5964;
+    color: #008489;
     text-align: center;
     line-height: 80rpx;
   }
@@ -139,7 +139,7 @@ export default {
   .code {
     position: absolute;
     right: 0;
-    background: #ef5964;
+    background: #008489;
     color: #fff;
   }
 </style>
