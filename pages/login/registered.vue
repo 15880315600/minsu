@@ -34,7 +34,9 @@
 		data() {
 			return {
 				phoneLogin: false,
-				form: {},
+				form: {
+					code:''
+				},
 				rules: {
 					name: [{
 						required: true,
@@ -60,10 +62,11 @@
 		methods: {
 			submit() {
 				this.$u.api.register(this.form).then(res => {
-					this.$message({
-						message: '注册成功',
-						type: 'success'
+					uni.showToast({
+						title: '注册成功',
+						icon: 'success'
 					})
+
 					setTimeout(() => {
 						uni.navigateTo({
 							url: './login'
@@ -72,11 +75,20 @@
 				})
 			},
 			getCode() {
+				if (!this.form.phone) {
+					uni.showToast({
+						title: '请先输入手机号',
+						icon: 'none'
+					})
+					return
+				}
 				this.$u.api.getCode(this.form).then(res => {
 					uni.showToast({
 						title: '发送成功',
 						icon: 'success'
 					})
+					console.log(res)
+					this.form.code = res.data
 				})
 			},
 			doLogin() {

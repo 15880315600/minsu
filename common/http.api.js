@@ -7,7 +7,14 @@ let registerUrl = '/user_info/register';
 let getUserInfoUrl = '/user_info';
 //登录
 
+//首页
+let getHomeAdUrl = '/advertisement/get_home_ad';
+let getDefaultUrl = '/notice/get_default';
+//首页
 
+//民宿列表
+let roomListUrl = '/room/query_page';
+//民宿列表
 
 
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
@@ -20,12 +27,25 @@ const install = (Vue, vm) => {
 	let getUserInfo = (params = {}) => vm.$u.get(getUserInfoUrl, params);
 	//登录
 
+	//首页
+	let getHomeAd = (params = {}) => vm.$u.get(getHomeAdUrl, params);
+	let getDefault = (params = {}) => vm.$u.get(getDefaultUrl, params);
+
+	//首页
+	//民宿列表
+
+let roomList = (params = {}) => vm.$u.get(roomListUrl, params);
+	//民宿列表
+
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = {
 		getCode,
 		login,
 		register,
-		getUserInfo
+		getUserInfo,
+		getHomeAd,
+		getDefault,
+		roomList
 	};
 }
 

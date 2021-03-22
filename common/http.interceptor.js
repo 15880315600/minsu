@@ -24,9 +24,9 @@ const install = (Vue, vm) => {
 
 	// 响应拦截，判断状态码是否通过
 	Vue.prototype.$u.http.interceptor.response = (res) => {
-		if (res.status == 200) {
+		if (res.code == 200) {
 			return res;
-		} else if (res.status == '440') {
+		} else if (res.code == '440') {
 			setTimeout(() => {
 				uni.navigateTo({
 					url: '../login/login'

@@ -5,30 +5,16 @@
 		</view>
 		<view class="wrap">
 			<u-form :model="form" ref="uForm">
-				<view v-if="!phoneLogin">
+				<view>
 					<u-form-item>
-						<u-input v-model="form.username" placeholder="请输入账户" :clearable="false" />
+						<u-input v-model="form.account" placeholder="请输入手机号" :clearable="false" />
 					</u-form-item>
 					<u-form-item>
-						<u-input v-model="form.password" type="password" :password-icon="true" placeholder="请输入密码"
-							:clearable="false" />
-					</u-form-item>
-				</view>
-				<view v-else>
-					<u-form-item>
-						<u-input v-model="form.userPhone" placeholder="请输入手机号" :clearable="false" />
-					</u-form-item>
-					<u-form-item>
-						<u-input v-model="form.phoneCode" placeholder="请输入验证码" :clearable="false" />
+						<u-input v-model="form.password" placeholder="请输入验证码" :clearable="false" />
 						<u-button class="code" size="mini" round @click="getCode">获取验证码</u-button>
 					</u-form-item>
 				</view>
 			</u-form>
-			<view class="attention u-flex u-row-between">
-				<view v-if="!phoneLogin" @click="logWay">用手机号码验证登录</view>
-				<view v-else @click="logWay">用密码验证登录</view>
-				<view>忘记密码</view>
-			</view>
 			<view>
 				<u-button class="login" @click="submit">登录</u-button>
 			</view>
@@ -38,14 +24,6 @@
 </template>
 
 <script>
-	// import {
-	//   setToken
-	// } from '@/utils/auth'
-	// import {
-	//   phoneLogin,
-	//   login,
-	//   getCode
-	// } from '@/api/user'
 	export default {
 		components: {
 
@@ -54,7 +32,9 @@
 			return {
 				phoneLogin: false,
 				loading: false,
-				form: {}
+				form: {
+					password:''
+				}
 			}
 		},
 		created() {
@@ -62,68 +42,42 @@
 		},
 		methods: {
 			submit() {
-				// this.loading = true
-				// if (this.phoneLogin) {
-				//   phoneLogin(this.form).then(res => {
-				//     const token = res.result.tokenHead + ' ' + res.result.token
-				//     this.loading = false
-				//     setToken(token)
-				//     setTimeout(() => {
-				//       this.$router.push({
-				//         path: '/'
-				//       })
-				//     }, 1000)
-				//   }).catch(() => {
-				//     this.loading = false
-				//   })
-				// } else {
-				//   login(this.form).then(res => {
-				//     const token = res.result.tokenHead + ' ' + res.result.token
-				//     this.loading = false
-				//     setToken(token)
-				//     setTimeout(() => {
-				//       this.$router.push({
-				//         path: '/'
-				//       })
-				//     }, 1000)
-				//   }).catch(() => {
-				//     this.loading = false
-				//   })
-				// }
+				this.$u.api.login(this.form).then(res => {
+					uni.showToast({
+						title: '登录成功',
+						icon: 'none'
+					})
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '../search/search'
+						})
+					}, 1000)
+				})
 			},
 			getCode() {
-				// if (this.form.userPhone) {
-				//   this.loading = true
-				//   const data = {}
-				//   data.phone = this.form.userPhone
-				//   getCode(data).then(res => {
-				//     this.$message({
-				//       message: '发送成功',
-				//       type: 'success'
-				//     })
-				//     this.loading = false
-				//   }).catch(() => {
-				//     this.loading = false
-				//   })
-				// } else {
-				//   this.$message({
-				//     message: '请先输入手机号',
-				//     type: 'error'
-				//   })
-				//   return false
-				// }
+				if (!this.form.account) {
+					uni.showToast({
+						title: '请先输入手机号',
+						icon: 'none'
+					})
+					return
+				}
+				let setData = {
+					phone: this.form.account
+				}
+				this.$u.api.getCode(setData).then(res => {
+					uni.showToast({
+						title: '发送成功',
+						icon: 'success'
+					})
+					console.log(res)
+					this.form.password = res.data
+				})
 			},
 			doRegister() {
 				uni.navigateTo({
-					url:'./registered'
+					url: './registered'
 				})
-			},
-			logWay() {
-				if (this.phoneLogin) {
-				  this.phoneLogin = false
-				} else {
-				  this.phoneLogin = true
-				}
 			}
 		}
 
@@ -168,7 +122,6 @@
 	.code {
 		position: absolute;
 		right: 0;
-		top: 12rpx;
 		background: #008489;
 		color: #fff;
 	}

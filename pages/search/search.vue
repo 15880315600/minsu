@@ -144,9 +144,30 @@
 
 		},
 		onLoad() {
-
+			this.feachData()
+			
+		},
+		onShow() {
+			this.getData()
 		},
 		methods: {
+			feachData() {
+				this.$u.api.getHomeAd().then(res => {
+					this.list = res.data.map(item=>{
+						return this.baseUrl + item.adImage
+					})
+				})
+				// this.$u.api.getDefault().then(res => {
+					
+				// })
+				
+			},
+			getData(){
+				this.$u.api.roomList(this.listQuery).then(res => {
+					
+				})
+				
+			},
 			jump(url) {
 				uni.navigateTo({
 					url: url
