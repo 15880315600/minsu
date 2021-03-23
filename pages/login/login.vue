@@ -33,7 +33,7 @@
 				phoneLogin: false,
 				loading: false,
 				form: {
-					password:''
+					password: ''
 				}
 			}
 		},
@@ -43,15 +43,25 @@
 		methods: {
 			submit() {
 				this.$u.api.login(this.form).then(res => {
-					uni.showToast({
-						title: '登录成功',
-						icon: 'none'
-					})
-					setTimeout(() => {
-						uni.navigateTo({
-							url: '../search/search'
+
+					let token = res.data.tokenHead + ' ' + res.data.token
+					uni.setStorageSync("token", token)
+					this.$u.api.getUserInfo().then(res2 => {
+						let userInfo = res2.data
+						uni.setStorageSync("userInfo", JSON.stringify(userInfo))
+						uni.showToast({
+							title: '登录成功',
+							icon: 'none'
 						})
-					}, 1000)
+						setTimeout(() => {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 1000)
+
+					})
+
+
 				})
 			},
 			getCode() {

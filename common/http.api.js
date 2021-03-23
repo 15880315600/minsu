@@ -4,7 +4,7 @@
 let codeUrl = '/user_info/get_code';
 let loginUrl = '/user_info/login';
 let registerUrl = '/user_info/register';
-let getUserInfoUrl = '/user_info';
+let getUserInfoUrl = 'user_info/account_info';
 //登录
 
 //首页

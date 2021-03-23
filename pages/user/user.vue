@@ -1,7 +1,12 @@
 <template>
 	<view class="wrap">
-		<view class="u-flex u-row-between">
-			<view class="topName">
+		<view class="u-flex u-row-between top">
+			<view class="topName" v-if="JSON.stringify(userInfo) == '{}'">
+				<view class="phone">
+					您还未登录
+				</view>
+			</view>
+			<view class="topName" v-else>
 				<view class="name">
 					手机用户8888
 				</view>
@@ -67,18 +72,33 @@
 		data() {
 			return {
 				src: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-
+				userInfo: {}
 			}
 		},
 		onLoad() {
 
 		},
+		onShow() {
+			this.getUserInfo()
+		},
 		methods: {
-			jump(url){
+			jump(url) {
 				uni.navigateTo({
-					url:url
+					url: url
 				})
-			}
+			},
+			getUserInfo() {
+				if (uni.getStorageSync("userInfo")) {
+					this.userInfo = JSON.parse(uni.getStorageSync("userInfo"))
+				} else {
+					this.$u.api.getUserInfo().then(res2 => {
+						let userInfo = res2.data
+						uni.setStorageSync("userInfo", JSON.stringify(userInfo))
+					})
+				}
+				console.log(this.userInfo)
+			},
+
 		}
 	}
 </script>
@@ -87,20 +107,24 @@
 	.wrap {
 		padding: 150rpx 28rpx 0;
 
-		.topName {
+		.top {
 			border-bottom: 1rpx solid #eeeeee;
-			padding: 28rpx 0;
 
-			.name {
-				font-size: 40rpx;
-				font-weight: 600;
-			}
+			.topName {
+				padding: 28rpx 0;
 
-			.phone {
-				color: #606266;
-				margin-top: 10rpx;
+				.name {
+					font-size: 40rpx;
+					font-weight: 600;
+				}
+
+				.phone {
+					color: #606266;
+					margin-top: 10rpx;
+				}
 			}
 		}
+
 
 		.orderList {
 			padding: 28rpx 0;
