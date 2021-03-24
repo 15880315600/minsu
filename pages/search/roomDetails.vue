@@ -6,24 +6,31 @@
 				<view class="icon" @click="back()">
 					<u-icon name="arrow-leftward" color="#333333"></u-icon>
 				</view>
-				<view class="icon">
+<!-- 				<view class="icon">
 					<u-icon name="heart" color="#333333"></u-icon>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<view class="main">
 			<view class="name">
 				<view class="top">
 					<view class="dese">
-						泉州市·整套公寓
+						{{ listData.roomArea }} m<sup>2</sup>
+						<text style="margin: 0 10rpx ;">·</text>
+						<text>
+							<text v-if="listData.hasWindows">有窗</text>
+							<text v-else>无窗</text>
+						</text>
+						<text style="margin: 0 10rpx ;">·</text>
+						整套公寓
 					</view>
 					<view class="title">
-						【水水大多数】啊实打实的萨达萨达撒旦撒旦撒旦阿斯蒂撒旦撒的撒的撒大傻
+						{{ listData.roomName }}
 					</view>
 				</view>
-				<view class="bottom u-flex">
+				<view class="bottom u-flex" v-if="listData.isSpecialOffer">
 					<view class="u-flex-6">
-						<text style="font-weight: 600;">距离预定截止时间仅剩10个小时。</text>房东很快就会停止接受所选日期的预定。
+						<text style="font-weight: 600;">特价房</text>限时秒杀，请尽快预定您所选的日期。
 					</view>
 					<view class="u-flex-1 u-flex u-row-right">
 						<view style="width: 68rpx;height: 68rpx;">
@@ -53,7 +60,7 @@
 								</u-image>
 							</view>
 							<view class="text-area">
-								1张床
+								{{ listData.bedNum }}张床
 							</view>
 						</view>
 						<view class="list_wrap">
@@ -71,7 +78,7 @@
 								</u-image>
 							</view>
 							<view class="text-area">
-								2位房客
+								{{ listData.canResideNum }}位房客
 							</view>
 						</view>
 					</view>
@@ -90,28 +97,28 @@
 									卧室1
 								</view>
 								<view class="text">
-									1张1.5米宽的双人床
+									{{ listData.bedNum }}张床
 								</view>
 							</view>
 						</view>
 					</scroll-view>
 				</view>
 
-				<view class="introduce item">
+				<view class="introduce item" v-if="listData.roomDesc">
 					<view class="item_wrap">
 						<view class="title">
 							房源介绍
 						</view>
 						<view class="content">
-							<view class="content_title">【*卡尔*星享】house*</view>
+							<!-- <view class="content_title">【*卡尔*星享】house*</view> -->
 							<view class="text">
-								当你守着日常压力与痛苦经理驱使而厌恶这个外部世界的时候撒旦的撒的撒撒大撒把v他皇贵妃皇贵妃够疯放到第三方
+								{{ listData.roomDesc }}
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
-			<view class="evaluation">
+<!-- 			<view class="evaluation">
 				<view class="item_wrap">
 					<view class="title">
 						房源评价
@@ -136,7 +143,7 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="location">
 				<view class="item_wrap">
 					<view class="title">
@@ -156,7 +163,7 @@
 					</text>
 				</view>
 			</view>
-			<view class="facilities">
+<!-- 			<view class="facilities">
 				<view class="item_wrap">
 					<view class="title">
 						设施/服务
@@ -169,7 +176,7 @@
 									</u-image>
 								</view>
 								<view class="text-area">
-									1张床
+										{{ listData.bedNum }}张床
 								</view>
 							</view>
 							<view class="u-flex-4 option">
@@ -198,7 +205,7 @@
 					</view>
 				</view>
 
-			</view>
+			</view> -->
 			<view class="instructions">
 				<view class="item_wrap">
 					<view class="title">
@@ -250,6 +257,18 @@
 					</text>
 				</view>
 			</view>
+			<view class="bottomBtn u-flex u-row-between">
+				<view>
+					<view class="price">
+						<text style="font-weight: 600;">￥{{ listData.roomPriceNow }}</text><text
+							style="text-decoration: line-through;font-size: 24rpx;">￥{{ listData.roomPriceOld }}</text><text
+							style="font-size: 24rpx;">/晚</text>
+					</view>
+				</view>
+				<view class="btn">
+					预定
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -259,18 +278,27 @@
 		data() {
 			return {
 				src: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-				listQuery: {},
+				listQuery: {
+					id: ''
+				},
 				listData: {},
-				list: ['https://cdn.uviewui.com/uview/swiper/1.jpg',
-					'https://cdn.uviewui.com/uview/swiper/2.jpg',
-					'https://cdn.uviewui.com/uview/swiper/3.jpg'
-				],
+				list: [],
 			}
 		},
-		onLoad() {
-
+		onLoad(e) {
+			this.listQuery.id = e.id
+			this.feachData()
 		},
 		methods: {
+			feachData() {
+				this.$u.api.roomDetails(this.listQuery).then(res => {
+					this.listData = res.data
+					let roomImagesArr = this.listData.roomImages.split(',')
+					this.list = roomImagesArr.map(item => {
+						return this.baseUrl + item
+					})
+				})
+			},
 			jump(url) {
 				uni.navigateTo({
 					url: url
@@ -529,6 +557,21 @@
 
 					}
 
+				}
+			}
+			.bottomBtn{
+				position: fixed;
+				bottom: 0;
+				width: 100%;
+				height: 120rpx;
+				padding: 0 28rpx;
+				border-top: 1rpx solid #EEEEEE;
+				background: #FFFFFF;
+				.btn{
+					background: #008489;
+					color: #FFFFFF;
+					padding: 18rpx 48rpx;
+					border-radius: 8rpx;
 				}
 			}
 		}

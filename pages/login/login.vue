@@ -43,7 +43,7 @@
 		methods: {
 			submit() {
 				this.$u.api.login(this.form).then(res => {
-
+			
 					let token = res.data.tokenHead + ' ' + res.data.token
 					uni.setStorageSync("token", token)
 					this.$u.api.getUserInfo().then(res2 => {
@@ -68,7 +68,7 @@
 				if (!this.form.account) {
 					uni.showToast({
 						title: '请先输入手机号',
-						icon: 'none'
+						icon: 'none' 
 					})
 					return
 				}

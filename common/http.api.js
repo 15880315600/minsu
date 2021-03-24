@@ -14,6 +14,7 @@ let getDefaultUrl = '/notice/get_default';
 
 //民宿列表
 let roomListUrl = '/room/query_page';
+let roomDetailsUrl = '/room/';
 //民宿列表
 
 
@@ -33,8 +34,9 @@ const install = (Vue, vm) => {
 
 	//首页
 	//民宿列表
+	let roomDetails = (params = {}) => vm.$u.get(roomDetailsUrl + params.id);
 
-let roomList = (params = {}) => vm.$u.get(roomListUrl, params);
+	let roomList = (params = {}) => vm.$u.get(roomListUrl, params);
 	//民宿列表
 
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
@@ -45,7 +47,8 @@ let roomList = (params = {}) => vm.$u.get(roomListUrl, params);
 		getUserInfo,
 		getHomeAd,
 		getDefault,
-		roomList
+		roomList,
+		roomDetails
 	};
 }
 

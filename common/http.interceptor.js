@@ -9,7 +9,7 @@ const install = (Vue, vm) => {
 		loadingText: '努力加载中~',
 		loadingTime: 800,
 		header: {
-			'Authorization': uni.getStorageSync("token")
+
 		}
 		// ......
 	});
@@ -24,12 +24,14 @@ const install = (Vue, vm) => {
 
 	// 响应拦截，判断状态码是否通过
 	Vue.prototype.$u.http.interceptor.response = (res) => {
+		console.log(res, 'res')
 		if (res.code == 200) {
 			return res;
-		} else if (res.code == '440') {
+		} else if (res.code == 440) {
+			
 			setTimeout(() => {
 				uni.navigateTo({
-					url: '../login/login'
+					url: '/pages/login/login'
 				})
 			}, 1000)
 			return false;

@@ -8,13 +8,13 @@
 			</view>
 			<view class="topName" v-else>
 				<view class="name">
-					手机用户8888
+					{{ userInfo.name }}
 				</view>
 				<view class="phone">
-					18888888888
+					{{ userInfo.phone }}
 				</view>
 			</view>
-			<view style="color: #18B566;" @click="jump('../login/login')">
+			<view style="color: #18B566;" @click="jump('../login/login')"  v-if="JSON.stringify(userInfo) == '{}'">
 				立即登录
 			</view>
 		</view>
@@ -91,8 +91,8 @@
 				if (uni.getStorageSync("userInfo")) {
 					this.userInfo = JSON.parse(uni.getStorageSync("userInfo"))
 				} else {
-					this.$u.api.getUserInfo().then(res2 => {
-						let userInfo = res2.data
+					this.$u.api.getUserInfo().then(res => {
+						let userInfo = res.data
 						uni.setStorageSync("userInfo", JSON.stringify(userInfo))
 					})
 				}

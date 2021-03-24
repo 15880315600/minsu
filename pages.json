@@ -79,12 +79,13 @@
 				"selectedIconPath": "/static/img/tabBar/search_active.png",
 				"text": "搜索"
 			},
+			// {
+			// 	"pagePath": "pages/wishList/wishList",
+			// 	"iconPath": "/static/img/tabBar/wish.png",
+			// 	"selectedIconPath": "/static/img/tabBar/wish_active.png",
+			// 	"text": "心愿单"
+			// },
 			{
-				"pagePath": "pages/wishList/wishList",
-				"iconPath": "/static/img/tabBar/wish.png",
-				"selectedIconPath": "/static/img/tabBar/wish_active.png",
-				"text": "心愿单"
-			}, {
 				"pagePath": "pages/user/user",
 				"iconPath": "static/img/tabBar/user.png",
 				"selectedIconPath": "static/img/tabBar/user_active.png",
