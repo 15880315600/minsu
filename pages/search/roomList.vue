@@ -9,9 +9,11 @@
 						<view style="width: 28rpx;" @click="jump('./search')">
 							<u-icon name="arrow-left"></u-icon>
 						</view>
-						<view style="text-align: center;width: 104rpx;">
+						<view style="text-align: center;width: 104rpx;" @click="show1 = true">
 							{{ listQuery.areaName }}
 						</view>
+						<u-picker mode="region" v-model="show1" @confirm="regionChange">
+						</u-picker>
 					</view>
 					<view class="u-flex-4">
 						<u-input v-model="listQuery.keyWord" placeholder="景点/地址/房源名" :clearable="false" />
@@ -118,6 +120,7 @@
 					priceEnd:''
 				},
 				show: false,
+				show1: false,
 				total: 0,
 				current: 0,
 				listData: [],
@@ -270,6 +273,12 @@
 				console.log(this.rangeValues);
 				console.log(JSON.stringify(e));
 			},
+			regionChange(e) {
+				console.log(e)
+				this.listQuery.areaName = e.area.label
+				this.listQuery.areaCode = e.area.value
+				this.feachData()
+			}
 		}
 	}
 </script>
