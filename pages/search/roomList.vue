@@ -234,6 +234,7 @@
 				this.listQuery.priceStart = this.rangeValues[0]
 				this.listQuery.priceEnd = this.rangeValues[1]
 				this.feachData()
+				this.show = false
 			},
 			screening(row) {
 				switch (row.value) {
