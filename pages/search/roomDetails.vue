@@ -24,8 +24,11 @@
 						<text style="margin: 0 10rpx ;">·</text>
 						整套公寓
 					</view>
+					<view class="dese1">
+						{{ listData.roomDesc }}
+					</view>
 					<view class="title">
-						{{ listData.roomName }}
+						{{ listData.tittle }}
 					</view>
 				</view>
 				<view class="bottom u-flex" v-if="listData.isSpecialOffer">
@@ -163,41 +166,18 @@
 					</text>
 				</view>
 			</view>
-<!-- 			<view class="facilities">
+			<view class="facilities">
 				<view class="item_wrap">
 					<view class="title">
 						设施/服务
 					</view>
 					<view class="content">
-						<view class="service u-flex" v-for="item in 4">
-							<view class="u-flex-1">
-								<view style="width: 48rpx;height: 48rpx;margin: 0 auto;">
-									<u-image width="100%" height="100%" src="/static/img/bed.png" border-radius="10">
-									</u-image>
-								</view>
-								<view class="text-area">
-										{{ listData.bedNum }}张床
-								</view>
-							</view>
-							<view class="u-flex-4 option">
-								<view class="u-flex">
-									<view class="u-flex-1">
+						<view class="service">
+							<view class="option">
+								<view class="u-flex u-flex-wrap">
+									<view class="u-flex-1" v-for="item in  listData.roomConfigurations">
 										<u-icon name="checkmark-circle" color="#30690b"></u-icon>
-										<text>可免费停车</text>
-									</view>
-									<view class="u-flex-1">
-										<u-icon name="checkmark-circle" color="#30690b"></u-icon>
-										<text>自助入住</text>
-									</view>
-								</view>
-								<view class="u-flex">
-									<view class="u-flex-1">
-										<u-icon name="checkmark-circle" color="#30690b"></u-icon>
-										<text>可预定长期住宿</text>
-									</view>
-									<view class="u-flex-1">
-										<u-icon name="checkmark-circle" color="#30690b"></u-icon>
-										<text>独立入住</text>
+										<text>{{ item }}</text>
 									</view>
 								</view>
 							</view>
@@ -205,7 +185,7 @@
 					</view>
 				</view>
 
-			</view> -->
+			</view>
 			<view class="instructions">
 				<view class="item_wrap">
 					<view class="title">
@@ -294,6 +274,10 @@
 				this.$u.api.roomDetails(this.listQuery).then(res => {
 					this.listData = res.data
 					let roomImagesArr = this.listData.roomImages.split(',')
+					if(this.listData.roomConfiguration){
+						this.listData.roomConfigurations = this.listData.roomConfiguration.split("，")
+					}
+					console.log(this.listData.roomConfigurations)
 					this.list = roomImagesArr.map(item => {
 						return this.baseUrl + item
 					})
@@ -349,9 +333,14 @@
 					border-bottom: 1rpx solid #eeeeee;
 
 					.dese {
-						color: #213b92;
+						color: #000000;
 						font-size: 20rpx;
 						margin-bottom: 6rpx;
+					}
+					.dese1{
+						color: #787878;
+						font-size: 18rpx;
+						line-height: 68rpx;
 					}
 
 					.title {

@@ -17,20 +17,23 @@
 
 					<u-form :model="form" ref="uForm">
 						<u-form-item>
-							<u-input v-model="form.name" placeholder="请输入目的地城市" :clearable="false" />
+							<u-input v-model="form.areaName" placeholder="请输入目的地城市" @click="show = true" disabled
+								:clearable="false" />
+							<u-picker mode="region" v-model="show" @confirm="regionChange">
+							</u-picker>
 						</u-form-item>
 						<u-form-item>
 							<view class="u-flex">
 								<view class="u-flex-4" style="border-right: 4rpx solid #f1f1f1;margin-right: 28rpx;">
-									<u-input v-model="form.intro" placeholder="请选择入住的日期" :clearable="false" />
+									<u-input v-model="form.keyWord" placeholder="景点/地址/房源名" :clearable="false" />
 								</view>
 								<view class="u-flex-1 u-flex">
-									<u-input v-model="form.intro" placeholder="房客人数" :clearable="false" />
+									<u-input v-model="form.bedNum" placeholder="房客人数" :clearable="false" />
 								</view>
 							</view>
 						</u-form-item>
 					</u-form>
-					<view class="btn" @click="jump('./roomList')">
+					<view class="btn" @click="jumpSearch()">
 						搜索房源
 					</view>
 					<view class="dese u-flex u-row-between">
@@ -73,15 +76,15 @@
 					<view class="main" v-for="item in listData" @click="jump('./roomDetails?id=' + item.id)">
 						<view class="u-relative">
 							<u-image width="100%" height="218rpx" :src="baseUrl + item.mainImage"></u-image>
-<!-- 							<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
+							<!-- 							<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
 								<u-icon name="heart"></u-icon>
 							</view> -->
 						</view>
-						<!-- 						<view class="dese">
-							整套公寓*2室1卫2床
-						</view> -->
+						<view class="dese">
+							{{ item.roomDesc }}
+						</view>
 						<view class="roomName u-line-2">
-							{{ item.roomName }}
+							{{ item.tittle }}
 						</view>
 						<view class="price">
 							<text style="font-weight: 600;">￥{{ item.roomPriceNow }}</text><text
@@ -112,6 +115,7 @@
 					page: 1,
 					pageSize: 10
 				},
+				show: false,
 				total: 0,
 				listData: []
 			}
@@ -125,11 +129,7 @@
 			this.status = 'loading';
 			this.listQuery.page = ++this.listQuery.page;
 			this.$u.api.roomList(this.listQuery).then(res => {
-				let cardList = res.result.records
-				let arr = []
-				arr = cardList.map(item => {
-					return item
-				})
+				let arr = res.data.records
 				this.listData = this.listData.concat(arr)
 			})
 		},
@@ -146,9 +146,9 @@
 						return this.baseUrl + item.adImage
 					})
 				})
-				// this.$u.api.getDefault().then(res => {
+				this.$u.api.getDefault().then(res => {
 
-				// })
+				})
 
 			},
 			getData() {
@@ -160,13 +160,23 @@
 					}
 
 				})
-
 			},
 			jump(url) {
 				uni.navigateTo({
 					url: url
 				})
 			},
+			jumpSearch(url) {
+				uni.setStorageSync("form", JSON.stringify(this.form))
+				uni.navigateTo({
+					url: './roomList'
+				})
+			},
+			regionChange(e) {
+				console.log(e)
+				this.form.areaName = e.area.label
+				this.form.areaCode = e.area.value
+			}
 		}
 	}
 </script>
