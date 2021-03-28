@@ -6,7 +6,7 @@
 				<view class="icon" @click="back()">
 					<u-icon name="arrow-leftward" color="#333333"></u-icon>
 				</view>
-<!-- 				<view class="icon">
+				<!-- 				<view class="icon">
 					<u-icon name="heart" color="#333333"></u-icon>
 				</view> -->
 			</view>
@@ -121,7 +121,7 @@
 					</view>
 				</view>
 			</view>
-<!-- 			<view class="evaluation">
+			<!-- 			<view class="evaluation">
 				<view class="item_wrap">
 					<view class="title">
 						房源评价
@@ -147,7 +147,7 @@
 					</view>
 				</view>
 			</view> -->
-			<view class="location">
+			<!-- 			<view class="location">
 				<view class="item_wrap">
 					<view class="title">
 						房源位置
@@ -165,7 +165,7 @@
 						该房源位于中国，福建省，泉州市，丰泽区，水岸假日·预定后可查看详细地址
 					</text>
 				</view>
-			</view>
+			</view> -->
 			<view class="facilities">
 				<view class="item_wrap">
 					<view class="title">
@@ -245,9 +245,88 @@
 							style="font-size: 24rpx;">/晚</text>
 					</view>
 				</view>
-				<view class="btn">
+				<view class="btn" @click="show = true">
 					预定
 				</view>
+				<u-popup v-model="show" mode="bottom">
+					<view>
+						<view class="roomInfo u-flex">
+							<view class="u-flex-2">
+								<view class="dese">整套公寓</view>
+								<view class="price">
+									<text style="font-weight: 600;">￥{{ listData.roomPriceNow }}</text><text
+										style="text-decoration: line-through;font-size: 24rpx;">￥{{ listData.roomPriceOld }}</text><text
+										style="font-size: 24rpx;">/晚</text>
+								</view>
+							</view>
+							<view class="u-flex-1">
+								<u-image width="100%" height="128rpx" :src="baseUrl + listData.mainImage">
+								</u-image>
+							</view>
+						</view>
+						<view class="checkInTime u-flex u-row-between">
+							<view @click="show1 = true">
+								<view class="label">入住日期</view>
+								<view class="value">
+									{{ temp.orderReserveTimeStart }}
+								</view>
+							</view>
+							<view @click="show1 = true">
+								<view class="label">退房日期</view>
+								<view class="value">
+									{{ temp.orderReserveTimeEnd }}
+								</view>
+							</view>
+							<view @click="show2 = true">
+								<view class="label">到店时间</view>
+								<view class="value">
+									{{ temp.estimateArriveTime }}
+								</view>
+							</view>
+						</view>
+						<view class="form">
+							<u-form :model="temp" ref="uForm">
+								<u-form-item label="入住人数" prop="numberOfResidents" :border-bottom="false"
+									label-width="168rpx">
+									<u-input v-model="temp.numberOfResidents" />
+								</u-form-item>
+								<u-form-item label="预留人" prop="reserveName" :border-bottom="false" label-width="168rpx">
+									<u-input v-model="temp.reserveName" />
+								</u-form-item>
+								<u-form-item label="预留号码" prop="reservePhone" :border-bottom="false"
+									label-width="168rpx">
+									<u-input v-model="temp.reservePhone" />
+								</u-form-item>
+								<u-form-item label="备注" :border-bottom="false" label-width="168rpx">
+									<u-input v-model="temp.orderRemark" />
+								</u-form-item>
+							</u-form>
+						</view>
+						<view class="totalPrice u-flex u-row-between">
+							<view>
+								总价
+							</view>
+							<view style="font-weight: 600;">
+								￥{{ listData.roomPriceNow * days }}
+							</view>
+						</view>
+						<view class="appointment">
+							<view class="btn" @click="appointment">
+								预约
+							</view>
+						</view>
+					</view>
+				</u-popup>
+				<u-calendar v-model="show1" :max-date="maxDate" active-bg-color="#008489"
+					range-bg-color="rgba(0,132,137,0.13)" mode="range" @change="change1"></u-calendar>
+				<u-picker mode="time" v-model="show2" :params="{
+					year: false,
+					month: false,
+					day: false,
+					hour: true,
+					minute: true,
+					second: false
+				}" @confirm="change2"></u-picker>
 			</view>
 		</view>
 	</view>
@@ -263,18 +342,53 @@
 				},
 				listData: {},
 				list: [],
+				maxDate: '',
+				show1: false,
+				show2: false,
+				days: 1,
+				show: false,
+				temp: {
+					orderReserveTimeStart: '',
+					orderReserveTimeEnd: '',
+					estimateArriveTime: '16:00'
+				},
+				rules: {
+					numberOfResidents: [{
+						required: true,
+						message: '请输入入住人数',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					reservePhone: [{
+						required: true,
+						message: '请输入预留人姓名',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					reserveName: [{
+						required: true,
+						message: '请输入预留人手机',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}]
+				}
+
 			}
 		},
 		onLoad(e) {
 			this.listQuery.id = e.id
 			this.feachData()
+			this.getDate()
+		},
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
 			feachData() {
 				this.$u.api.roomDetails(this.listQuery).then(res => {
 					this.listData = res.data
 					let roomImagesArr = this.listData.roomImages.split(',')
-					if(this.listData.roomConfiguration){
+					if (this.listData.roomConfiguration) {
 						this.listData.roomConfigurations = this.listData.roomConfiguration.split("，")
 					}
 					console.log(this.listData.roomConfigurations)
@@ -282,6 +396,84 @@
 						return this.baseUrl + item
 					})
 				})
+			},
+			getDate() {
+				let date = new Date();
+				let y = date.getFullYear();
+				let MM = date.getMonth() + 1;
+				MM = MM < 10 ? ('0' + MM) : MM;
+				let d = date.getDate();
+				d = d < 10 ? ('0' + d) : d;
+
+				var myDate = new Date();
+				myDate.setDate(myDate.getDate() + 1);
+
+				var today = new Date();
+				let curDate = today.getTime();
+				let one = 365 * 24 * 3600 * 1000;
+				let oneYear = curDate + one;
+				today.setTime(oneYear); //注意，这行是关键代码
+				var tYear = today.getFullYear();
+				var tMonth = today.getMonth();
+				var tDate = today.getDate();
+				tMonth = tMonth < 10 ? ('0' + tMonth) : tMonth;
+				tDate = tDate < 10 ? ('0' + tDate) : tDate;
+				this.maxDate = tYear + "-" + tMonth + "-" + tDate;
+
+
+				this.temp.orderReserveTimeEnd = myDate.toLocaleDateString()
+				this.temp.orderReserveTimeStart = y + '/' + MM + '/' + d
+			},
+			appointment() {
+				this.temp.orderRoomId = this.listData.id
+				let obj = {
+					...this.temp
+				}
+				var ch="/"
+				obj.orderReserveTimeStart = obj.orderReserveTimeStart.replace(new RegExp(ch,'g'),"-")
+				obj.orderReserveTimeEnd = obj.orderReserveTimeEnd.replace(new RegExp(ch,'g'),"-")
+				if(!obj.numberOfResidents){
+					uni.showToast({
+						title: '请输入入住人数',
+						icon: 'none'
+					})
+					return
+				}
+				if(!obj.reservePhone){
+					uni.showToast({
+						title: '请输入预留人姓名',
+						icon: 'none'
+					})
+					return
+				}
+				if(!obj.reserveName){
+					uni.showToast({
+						title: '请输入预留人手机',
+						icon: 'none'
+					})
+					return
+				}
+
+				this.$u.api.userCreateOrde(obj).then(res => {
+
+				})
+			},
+			change1(e) {
+				this.temp.orderReserveTimeEnd = e.endDate
+				this.temp.orderReserveTimeStart = e.startDate
+				this.days = this.difference(this.temp.orderReserveTimeStart, this.temp.orderReserveTimeEnd)
+			},
+			change2(e) {
+				this.temp.estimateArriveTime = e.hour + ':' + e.minute
+			},
+			difference(beginTime, endTime) {
+				var dateBegin = new Date(beginTime);
+				var dateEnd = new Date(endTime);
+				var dateDiff = dateEnd.getTime() - dateBegin.getTime(); //时间差的毫秒数
+
+				var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000)); //计算出相差天数
+				console.log(dayDiff)
+				return dayDiff
 			},
 			jump(url) {
 				uni.navigateTo({
@@ -337,7 +529,8 @@
 						font-size: 20rpx;
 						margin-bottom: 6rpx;
 					}
-					.dese1{
+
+					.dese1 {
 						color: #787878;
 						font-size: 18rpx;
 						line-height: 68rpx;
@@ -548,7 +741,8 @@
 
 				}
 			}
-			.bottomBtn{
+
+			.bottomBtn {
 				position: fixed;
 				bottom: 0;
 				width: 100%;
@@ -556,11 +750,57 @@
 				padding: 0 28rpx;
 				border-top: 1rpx solid #EEEEEE;
 				background: #FFFFFF;
-				.btn{
+
+				.btn {
 					background: #008489;
 					color: #FFFFFF;
 					padding: 18rpx 48rpx;
 					border-radius: 8rpx;
+				}
+
+				.roomInfo {
+					padding: 28rpx;
+					border-bottom: 1rpx solid #EEEEEE;
+
+					.dese {
+						font-size: 20rpx;
+						color: #b0722f;
+						margin-bottom: 14rpx;
+					}
+				}
+
+				.checkInTime {
+					padding: 28rpx;
+					border-bottom: 1rpx solid #EEEEEE;
+					text-align: center;
+
+					.label {
+						font-size: 20rpx;
+					}
+
+					.value {
+						color: #008489;
+						font-weight: 600;
+					}
+				}
+
+				.form {
+					padding: 28rpx;
+					border-bottom: 1rpx solid #EEEEEE;
+				}
+
+				.totalPrice {
+					padding: 28rpx;
+					border-bottom: 1rpx solid #EEEEEE;
+				}
+
+				.appointment {
+					margin-top: 100rpx;
+					padding: 28rpx;
+
+					.btn {
+						text-align: center;
+					}
 				}
 			}
 		}
