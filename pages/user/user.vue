@@ -13,8 +13,11 @@
 				<view class="phone">
 					{{ userInfo.phone }}
 				</view>
+				<view class="phone">
+					余额：{{ userInfo.balance }}
+				</view>
 			</view>
-			<view style="color: #18B566;" @click="jump('../login/login')"  v-if="JSON.stringify(userInfo) == '{}'">
+			<view style="color: #18B566;" @click="jump('../login/login')" v-if="JSON.stringify(userInfo) == '{}'">
 				立即登录
 			</view>
 		</view>
@@ -23,15 +26,7 @@
 				我的房源订单
 			</view>
 			<view class="u-flex">
-				<view class="item u-flex-1" @click="jump('./orderList')">
-					<view class="img u-flex u-col-bottom">
-						<u-image width="68rpx" height="68rpx" src="/static/img/allOrder.png"></u-image>
-					</view>
-					<view class="text-area">
-						全部订单
-					</view>
-				</view>
-				<view class="item u-flex-1" @click="jump('./orderList')">
+				<view class="item u-flex-1" @click="jump('./orderList?current='+ 0)">
 					<view class="img  u-flex u-col-bottom">
 						<u-image width="68rpx" height="68rpx" src="/static/img/complete.png"></u-image>
 					</view>
@@ -39,7 +34,7 @@
 						有效订单
 					</view>
 				</view>
-				<view class="item u-flex-1" @click="jump('./orderList')">
+				<view class="item u-flex-1" @click="jump('./orderList?current='+ 1)">
 					<view class="img  u-flex u-col-bottom">
 						<u-image width="68rpx" height="68rpx" src="/static/img/payment.png"></u-image>
 					</view>
@@ -47,14 +42,36 @@
 						待支付订单
 					</view>
 				</view>
+				<view class="item u-flex-1">
+				</view>
 			</view>
 		</view>
+<!-- 		<view class="orderList">
+			<view class="title">
+				我的支付记录
+			</view>
+			<view class="u-flex">
+				<view class="item u-flex-1" @click="jump('./orderList')">
+					<view class="img  u-flex u-col-bottom">
+						<u-image width="68rpx" height="68rpx" src="/static/img/allOrder.png"></u-image>
+					</view>
+					<view class="text-area">
+						支付记录
+					</view>
+				</view>
+				<view class="item u-flex-1">
+				</view>
+				<view class="item u-flex-1">
+				</view>
+			</view>
+
+		</view> -->
 		<view class="orderList">
 			<view class="title">
 				帮助中心
 			</view>
 			<view class="u-flex">
-				<view class="item" style="width: 33.3%;" @click="jump('./orderList')">
+				<view class="item" style="width: 33.3%;" @click="jump()">
 					<view class="img u-flex u-col-bottom">
 						<u-image width="68rpx" height="68rpx" src="/static/img/surrounding.png"></u-image>
 					</view>

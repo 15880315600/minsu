@@ -11,16 +11,17 @@
 			<u-tabs :list="list" bar-width="100" height="100" active-color="#232323" inactive-color="#656565"
 				:is-scroll="false" font-size="24" :current="current" @change="change"></u-tabs>
 		</view>
-		<view class="main">
-			<view class="list u-flex u-row-between" v-for="item in listData" @click="jump('./orderDetails')">
+		<view class="main" v-if="listData.length >0">
+			<view class="list u-flex u-row-between" v-for="item in listData" @click="jump(item)">
 				<view class="u-flex-3">
-					<view class="dese">整套公寓*2室1卫2床</view>
+					<view class="dese">{{ item.tittle }}</view>
 					<view class="checkInTime">
-						2021/03/21-03/22·1晚
+						{{ item.orderReserveTimeStart.split(' ')[0] }} - {{ item.orderReserveTimeEnd.split(' ')[0] }}
 					</view>
 					<view class="price">
-						<text style="color: #953c2a;font-weight: 600;">订单待支付</text>·
-						<text>￥188</text>
+						<text style="color: #953c2a;font-weight: 600;" v-if="current == 0">已支付</text>
+						<text style="color: #953c2a;font-weight: 600;" v-else>待支付</text>·
+						<text>￥{{ item.orderPricePay }}</text>
 					</view>
 				</view>
 				<view class="u-relative u-flex-1" style="margin-left: 18rpx;">
@@ -34,6 +35,9 @@
 				<u-loadmore :status="status" />
 			</view>
 		</view>
+		<view v-else>
+			<u-empty mode="order" style="margin-top: 180rpx;"></u-empty>
+		</view>
 	</view>
 </template>
 
@@ -42,10 +46,7 @@
 		data() {
 			return {
 				src: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-
 				list: [{
-					name: '全部订单'
-				}, {
 					name: '有效订单'
 				}, {
 					name: '待支付'
@@ -56,12 +57,17 @@
 					page: 1,
 					pageSize: 10
 				},
-				total: 15,
-				listData: 10
+				total: 0,
+				listData: []
 			}
 		},
-		onLoad() {
-
+		onLoad(e) {
+			this.current = e.current
+			if (this.current == 0) {
+				this.feachData()
+			} else {
+				this.feachData1()
+			}
 		},
 		onReachBottom() {
 			let str = Math.ceil(this.total / 10)
@@ -71,34 +77,52 @@
 			}
 			this.status = 'loading';
 			this.listQuery.page = ++this.listQuery.page;
-			this.listData += 10
-			// this.$u.api.cartList(this.listQuery).then(res => {
-			// 	let cardList = res.result.records
-			// 	let arr = []
-			// 	cardList.forEach((item, index) => {
-			// 		item.productAttrs = JSON.parse(item.productAttr)
-			// 		let spDatas = Object.values(item.productAttrs)
-			// 		item.spData = spDatas.toString()
-			// 		item.checked = false
-			// 		arr.push(item)
-			// 	})
-			// 	this.cardList = this.cardList.concat(arr)
-			// })
+			if (this.current == 0) {
+				this.$u.api.userPay(this.listQuery).then(res => {
+					let list = res.data.records
+					let arr = []
+					list.forEach((item, index) => {
+						arr.push(item)
+					})
+					this.listData = this.listData.concat(arr)
+				})
+			}
 
 		},
 		methods: {
-			jump(url) {
-				uni.navigateTo({
-					url: url
+			feachData1() {
+				this.$u.api.myWaitPay().then(res => {
+					this.listData = res.data
 				})
 			},
-			back(url){
+			feachData() {
+				this.$u.api.userPay(this.listQuery).then(res => {
+					this.listData = res.data.records
+					this.total = res.data.total
+					if (this.total <= 10) {
+						this.status = 'nomore';
+					}
+				})
+			},
+			jump(item) {
+				item.current = this.current
+				uni.setStorageSync("item", JSON.stringify(item))
+				uni.navigateTo({
+					url: './orderDetails'
+				})
+			},
+			back(url) {
 				uni.switchTab({
-					url:url
+					url: url
 				})
 			},
 			change(index) {
 				this.current = index;
+				if (this.current == 0) {
+					this.feachData()
+				} else {
+					this.feachData1()
+				}
 			}
 		}
 	}

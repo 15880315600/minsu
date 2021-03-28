@@ -327,6 +327,23 @@
 					minute: true,
 					second: false
 				}" @confirm="change2"></u-picker>
+				<u-keyboard default="" ref="uKeyboard" mode="number" :mask="true" :mask-close-able="false" :dot-enabled="false"
+					v-model="show3" :safe-area-inset-bottom="true" :tooltip="false" @change="onChange" @backspace="onBackspace">
+					<view>
+						<view class="u-text-center u-padding-20 money">
+							<text>{{ listData.roomPriceNow * days }}</text>
+							<text class="u-font-20 u-padding-left-10">元</text>
+							<view class="u-padding-10 close" data-flag="false" @tap="showPop(false)">
+								<u-icon name="close" color="#333333" size="28"></u-icon>
+							</view>
+						</view>
+						<view class="u-flex u-row-center">
+							<u-message-input mode="box" :maxlength="6" :dot-fill="true" v-model="password"
+								:disabled-keyboard="true"></u-message-input>
+						</view>
+						<view class="u-text-center u-padding-top-10 u-padding-bottom-20 tips">支付键盘</view>
+					</view>
+				</u-keyboard>
 			</view>
 		</view>
 	</view>
@@ -345,6 +362,7 @@
 				maxDate: '',
 				show1: false,
 				show2: false,
+				show3: false,
 				days: 1,
 				show: false,
 				temp: {
@@ -352,6 +370,8 @@
 					orderReserveTimeEnd: '',
 					estimateArriveTime: '16:00'
 				},
+				password:'',
+				setData:{},
 				rules: {
 					numberOfResidents: [{
 						required: true,
@@ -379,9 +399,6 @@
 			this.listQuery.id = e.id
 			this.feachData()
 			this.getDate()
-		},
-		onReady() {
-			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
 			feachData() {
@@ -455,8 +472,46 @@
 				}
 
 				this.$u.api.userCreateOrde(obj).then(res => {
-
+					// uni.showToast({
+					// 	title: '操作成功',
+					// 	icon: 'success'
+					// })
+					this.show = false
+					this.setData.orderNo = res.data
+					this.show3 = true
+					
 				})
+			},
+			onChange(val) {
+				if (this.password.length < 6) {
+					this.password += val;
+				}
+			
+				if (this.password.length >= 6) {
+					this.pay();
+				}
+			},
+			onBackspace(e) {
+				if (this.password.length > 0) {
+					this.password = this.password.substring(0, this.password.length - 1);
+				}
+			},
+			pay() {
+				uni.showLoading({
+					title: '支付中'
+				})
+				this.$u.api.pay(this.setData).then(res => {
+					uni.hideLoading();
+					this.show3 = false;
+					uni.showToast({
+						icon: 'success',
+						title: '支付成功'
+					})
+				})
+			},
+			showPop(flag = true) {
+				this.password = '';
+				this.show = flag;
 			},
 			change1(e) {
 				this.temp.orderReserveTimeEnd = e.endDate
@@ -801,6 +856,23 @@
 					.btn {
 						text-align: center;
 					}
+				}
+				.money {
+					font-size: 80rpx;
+					color: $u-type-warning;
+					position: relative;
+				
+					.close {
+						position: absolute;
+						top: 20rpx;
+						right: 20rpx;
+						line-height: 28rpx;
+						font-size: 28rpx;
+					}
+				}
+				
+				.tips {
+					color: $u-tips-color;
 				}
 			}
 		}

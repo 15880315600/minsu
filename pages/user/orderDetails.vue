@@ -1,8 +1,11 @@
 <template>
 	<view class="wrap">
 		<view class="img u-relative">
-			<u-image width="100%" height="480rpx" :src="src"></u-image>
-			<view class="u-absolute sta">
+			<u-image width="100%" height="480rpx" :src="baseUrl + listData.orderImage"></u-image>
+			<view class="u-absolute sta" v-if="listData.current == 0">
+				订单已支付
+			</view>
+			<view class="u-absolute sta" v-if="listData.current == 1">
 				订单未支付
 			</view>
 			<view class="topBack u-absolute" @click="jump('./orderList')">
@@ -12,10 +15,10 @@
 		<view class="main">
 			<view class="roomName">
 				<view class="top">
-					3月21日周日-3月22日周一
+					{{ listData.orderReserveTimeStart.split(' ')[0] }} - {{ listData.orderReserveTimeEnd.split(' ')[0] }}
 				</view>
 				<view class="title">
-					【卡比*星享】江景投影复古墨绿写真居/西街2公里/动车站15分钟/乳胶床垫自助入住/夜景超美带飘窗
+					{{ listData.tittle }}
 				</view>
 			</view>
 			<view class="checkInTime u-flex">
@@ -24,8 +27,8 @@
 						入住
 					</view>
 					<view class="time">
-						<view class="date">2021年3月21日</view>
-						<view class="dateTime">下午3：00</view>
+						<view class="date">{{ listData.orderReserveTimeStart.split(' ')[0] }}</view>
+						<view class="dateTime">下午4：00</view>
 					</view>
 				</view>
 				<view class="u-flex-1 right">
@@ -33,34 +36,40 @@
 						退房
 					</view>
 					<view class="time">
-						<view class="date">2021年3月21日</view>
-						<view class="dateTime">下午3：00</view>
+						<view class="date">{{ listData.orderReserveTimeEnd.split(' ')[0] }}</view>
+						<view class="dateTime">中午12：00</view>
 					</view>
 				</view>
 			</view>
 			<view class="list">
-				<view class="label">订单号</view>
-				<view>488481521841251551</view>
+				<view class="label">预留人姓名</view>
+				<view>{{ listData.reserveName }}</view>
+			</view>
+			<view class="list">
+				<view class="label">预留人手机</view>
+				<view>{{ listData.reservePhone }}</view>
 			</view>
 			<view class="list">
 				<view class="label">订单号</view>
-				<view>488481521841251551</view>
+				<view>{{ listData.orderNo }}</view>
 			</view>
 			<view class="list">
-				<view class="label">订单号</view>
-				<view>488481521841251551</view>
+				<view class="label">备注</view>
+				<view>{{ listData.orderRemark }}</view>
 			</view>
 			<view class="list">
-				<view class="label">订单号</view>
-				<view>488481521841251551</view>
+				<view class="label">支付总价</view>
+				<view>{{ listData.orderPricePay }}</view>
 			</view>
+			
+			
 
 		</view>
-		<view class="bottom u-flex u-row-right">
+<!-- 		<view class="bottom u-flex u-row-right">
 			<view class="btn">
 				评价
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -68,13 +77,13 @@
 	export default {
 		data() {
 			return {
-				src: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 				listQuery: {},
 				listData: {}
 			}
 		},
 		onLoad() {
-
+			this.listData = JSON.parse(uni.getStorageSync("item"))
+			console.log(this.listData)
 		},
 		methods: {
 			jump(url) {
