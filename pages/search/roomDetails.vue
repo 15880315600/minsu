@@ -477,7 +477,7 @@
 					// 	icon: 'success'
 					// })
 					this.show = false
-					this.setData.orderNo = res.data
+					this.setData.orderNo = '26151'
 					this.show3 = true
 					
 				})

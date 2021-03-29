@@ -67,6 +67,9 @@
 					</view>
 				</view>
 			</view>
+			<view>
+				<u-notice-bar mode="horizontal" :list="noticeList"></u-notice-bar>
+			</view>
 			<view class="roomList">
 				<view class="top">
 					<view class="title">专享优惠</view>
@@ -117,7 +120,8 @@
 				},
 				show: false,
 				total: 0,
-				listData: []
+				listData: [],
+				noticeList:[]
 			}
 		},
 		onReachBottom() {
@@ -147,7 +151,7 @@
 					})
 				})
 				this.$u.api.getDefault().then(res => {
-
+					this.noticeList.push(res.data.desc)
 				})
 
 			},

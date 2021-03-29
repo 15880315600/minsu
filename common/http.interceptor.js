@@ -5,7 +5,7 @@ const install = (Vue, vm) => {
 	// 此为自定义配置参数，具体参数见上方说明
 	Vue.prototype.$u.http.setConfig({
 		baseUrl: '/api',
-		// baseUrl:'http://192.168.2.168:9008',
+		// baseUrl: 'http://101.37.253.98/api/',
 		loadingText: '努力加载中~',
 		loadingTime: 800,
 		header: {
@@ -28,7 +28,7 @@ const install = (Vue, vm) => {
 		if (res.code == 200) {
 			return res;
 		} else if (res.code == 440) {
-			
+
 			setTimeout(() => {
 				uni.navigateTo({
 					url: '/pages/login/login'
