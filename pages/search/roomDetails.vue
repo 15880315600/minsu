@@ -147,25 +147,30 @@
 					</view>
 				</view>
 			</view> -->
-			<!-- 			<view class="location">
-				<view class="item_wrap">
+			<view class="location">
+				<view class="item_wrap u-flex u-row-between">
 					<view class="title">
 						房源位置
 					</view>
+					<view @click="navigation()" style="width: 66rpx;">
+						<view>
+							<u-image src="/static/img/static_img_navigation.png" width="66rpx" height="66rpx"></u-image>
+						</view>
+					</view>
 				</view>
 				<view class="content">
-					<view class="map">
+					<!-- <view class="map">
 						<u-image width="100%" height="288rpx" :src="src">
 						</u-image>
-					</view>
+					</view> -->
 				</view>
 				<view class="address">
 					<u-icon name="map-fill"></u-icon>
 					<text>
-						该房源位于中国，福建省，泉州市，丰泽区，水岸假日·预定后可查看详细地址
+						该房源位于中国，{{ storeData.province }}，{{ storeData.city }}，{{ storeData.region }}，{{ storeData.address }}
 					</text>
 				</view>
-			</view> -->
+			</view>
 			<view class="facilities">
 				<view class="item_wrap">
 					<view class="title">
@@ -175,7 +180,7 @@
 						<view class="service">
 							<view class="option">
 								<view class="u-flex u-flex-wrap">
-									<view class="u-flex-1" v-for="item in  listData.roomConfigurations">
+									<view class="u-flex-1" v-for="item in  listData.configurations">
 										<u-icon name="checkmark-circle" color="#30690b"></u-icon>
 										<text>{{ item }}</text>
 									</view>
@@ -366,6 +371,7 @@
 					id: ''
 				},
 				listData: {},
+				storeData: {},
 				list: [],
 				date: [],
 				maxDate: '',
@@ -381,7 +387,7 @@
 				},
 				password: '',
 				setData: {},
-				scheduledTime:[],
+				scheduledTime: [],
 				rules: {
 					numberOfResidents: [{
 						required: true,
@@ -401,7 +407,72 @@
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
 					}]
-				}
+				},
+				roomConfigurationList: [{
+						key: '0',
+						label: '自助入住'
+					},
+					{
+						key: '1',
+						label: '电梯'
+					},
+					{
+						key: '2',
+						label: '空调'
+					},
+					{
+						key: '15',
+						label: '洗衣机'
+					},
+					{
+						key: '3',
+						label: '无线网络'
+					},
+					{
+						key: '4',
+						label: '衣架'
+					},
+					{
+						key: '5',
+						label: '洗发水'
+					},
+					{
+						key: '6',
+						label: '按摩浴缸'
+					},
+					{
+						key: '7',
+						label: '吹风机'
+					},
+					{
+						key: '8',
+						label: '热水'
+					},
+					{
+						key: '9',
+						label: '冰箱'
+					},
+					{
+						key: '10',
+						label: '热水壶'
+					},
+					{
+						key: '11',
+						label: '一氧化碳报警器'
+					},
+					{
+						key: '12',
+						label: '灭火器'
+					},
+					{
+						key: '13',
+						label: '洗手液'
+					},
+					{
+						key: '14',
+						label: '急救包'
+					}
+				],
 
 			}
 		},
@@ -414,14 +485,47 @@
 			feachData() {
 				this.$u.api.roomDetails(this.listQuery).then(res => {
 					this.listData = res.data
+					this.storeDetails()
 					let roomImagesArr = this.listData.roomImages.split(',')
 					if (this.listData.roomConfiguration) {
-						this.listData.roomConfigurations = this.listData.roomConfiguration.split("，")
+						this.listData.roomConfigurations = this.listData.roomConfiguration.split(",")
+						this.listData.configurations = []
+						this.listData.roomConfigurations.map(item => {
+							this.roomConfigurationList.forEach(iten => {
+								console.log(item, iten)
+								if (item == iten.key) {
+									this.listData.configurations.push(iten.label)
+								}
+							})
+						})
+
 					}
-					console.log(this.listData.roomConfigurations)
+					console.log(this.listData.configurations)
 					this.list = roomImagesArr.map(item => {
 						return this.baseUrl + item
 					})
+				})
+			},
+			storeDetails() {
+				let setData = {
+					id: this.listData.storeId
+					
+				}
+				this.$u.api.storeDetails(setData).then(res => {
+					this.storeData = res.data
+				})
+			},
+			navigation() {
+				wx.openLocation({
+					latitude: this.storeData.latitude, // 纬度，范围为-90~90，负数表示南纬
+					longitude: this.storeData.longitude, // 经度，范围为-180~180，负数表示西经
+					scale: 14, // 缩放比例
+					name: this.storeData.address,
+					address: this.storeData.province + this.storeData.city + this.storeData
+						.region + this.storeData.address,
+					success: function(r) {
+						console.log(r)
+					}
 				})
 			},
 			getDate() {
@@ -450,7 +554,7 @@
 
 				this.temp.orderReserveTimeEnd = myDate.toLocaleDateString()
 				this.temp.orderReserveTimeStart = y + '/' + MM + '/' + d
-				
+
 				let start = this.temp.orderReserveTimeStart.replace(/\//g, '-')
 				let end = this.temp.orderReserveTimeEnd.replace(/\//g, '-')
 				this.date.push(start)
@@ -465,7 +569,7 @@
 					this.scheduledTime = res.data
 					this.show = true
 				})
-				
+
 			},
 			appointment() {
 				this.temp.orderRoomId = this.listData.id
@@ -544,7 +648,7 @@
 			disabledDate(date) {
 				// let str = ''
 				// this.scheduledTime.forEach(item=>{
-					
+
 				// })
 				// const start = new Date('2021/4/10').getTime();
 				// const end = new Date('2021/4/18').getTime();

@@ -19,6 +19,7 @@ let roomDetailsUrl = '/room/';
 let userCreateOrdeUrl = '/order_table/user_create_order';
 let payUrl = '/order_table/pay/';
 let selectByDateUrl = '/room_reserve_record/select_by_date';
+let storeDetailsUrl = '/store/';
 
 //民宿列表
 //订单
@@ -49,6 +50,7 @@ const install = (Vue, vm) => {
 	let userCreateOrde = (params = {}) => vm.$u.post(userCreateOrdeUrl, params);
 	let pay = (params = {}) => vm.$u.post(payUrl + params.orderNo);
 	let selectByDate = (params = {}) => vm.$u.get(selectByDateUrl, params);
+	let storeDetails = (params = {}) => vm.$u.get(storeDetailsUrl + params.id);
 	
 	//民宿列表
 	
@@ -72,7 +74,8 @@ const install = (Vue, vm) => {
 		pay,
 		myWaitPay,
 		userPay,
-		selectByDate
+		selectByDate,
+		storeDetails
 	};
 }
 
