@@ -245,7 +245,7 @@
 							style="font-size: 24rpx;">/晚</text>
 					</view>
 				</view>
-				<view class="btn" @click="show = true">
+				<view class="btn" @click="reservationBtn()">
 					预定
 				</view>
 				<u-popup v-model="show" mode="bottom">
@@ -317,8 +317,11 @@
 						</view>
 					</view>
 				</u-popup>
-				<u-calendar v-model="show1" :max-date="maxDate" active-bg-color="#008489"
-					range-bg-color="rgba(0,132,137,0.13)" mode="range" @change="change1"></u-calendar>
+				<!-- 				<u-calendar v-model="show1" :max-date="maxDate" active-bg-color="#008489"
+					range-bg-color="rgba(0,132,137,0.13)" mode="range" @change="change1"></u-calendar> -->
+				<ei-calendar :visible.sync="show1" type="range" :disabledDate="disabledDate" v-model="date"
+					format="YYYY-MM-DD" @submit="change1"></ei-calendar>
+
 				<u-picker mode="time" v-model="show2" :params="{
 					year: false,
 					month: false,
@@ -327,8 +330,9 @@
 					minute: true,
 					second: false
 				}" @confirm="change2"></u-picker>
-				<u-keyboard default="" ref="uKeyboard" mode="number" :mask="true" :mask-close-able="false" :dot-enabled="false"
-					v-model="show3" :safe-area-inset-bottom="true" :tooltip="false" @change="onChange" @backspace="onBackspace">
+				<u-keyboard default="" ref="uKeyboard" mode="number" :mask="true" :mask-close-able="false"
+					:dot-enabled="false" v-model="show3" :safe-area-inset-bottom="true" :tooltip="false"
+					@change="onChange" @backspace="onBackspace">
 					<view>
 						<view class="u-text-center u-padding-20 money">
 							<text>{{ listData.roomPriceNow * days }}</text>
@@ -350,7 +354,11 @@
 </template>
 
 <script>
+	import EiCalendar from '@/components/ei-calendar/ei-calendar'
 	export default {
+		components: {
+			EiCalendar
+		},
 		data() {
 			return {
 				src: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
@@ -359,6 +367,7 @@
 				},
 				listData: {},
 				list: [],
+				date: [],
 				maxDate: '',
 				show1: false,
 				show2: false,
@@ -370,8 +379,9 @@
 					orderReserveTimeEnd: '',
 					estimateArriveTime: '16:00'
 				},
-				password:'',
-				setData:{},
+				password: '',
+				setData: {},
+				scheduledTime:[],
 				rules: {
 					numberOfResidents: [{
 						required: true,
@@ -440,30 +450,46 @@
 
 				this.temp.orderReserveTimeEnd = myDate.toLocaleDateString()
 				this.temp.orderReserveTimeStart = y + '/' + MM + '/' + d
+				
+				let start = this.temp.orderReserveTimeStart.replace(/\//g, '-')
+				let end = this.temp.orderReserveTimeEnd.replace(/\//g, '-')
+				this.date.push(start)
+				this.date.push(end)
+				console.log(this.date)
+			},
+			reservationBtn() {
+				let setData = {
+					roomId: this.listData.id
+				}
+				this.$u.api.selectByDate(setData).then(res => {
+					this.scheduledTime = res.data
+					this.show = true
+				})
+				
 			},
 			appointment() {
 				this.temp.orderRoomId = this.listData.id
 				let obj = {
 					...this.temp
 				}
-				var ch="/"
-				obj.orderReserveTimeStart = obj.orderReserveTimeStart.replace(new RegExp(ch,'g'),"-")
-				obj.orderReserveTimeEnd = obj.orderReserveTimeEnd.replace(new RegExp(ch,'g'),"-")
-				if(!obj.numberOfResidents){
+				var ch = "/"
+				obj.orderReserveTimeStart = obj.orderReserveTimeStart.replace(new RegExp(ch, 'g'), "-")
+				obj.orderReserveTimeEnd = obj.orderReserveTimeEnd.replace(new RegExp(ch, 'g'), "-")
+				if (!obj.numberOfResidents) {
 					uni.showToast({
 						title: '请输入入住人数',
 						icon: 'none'
 					})
 					return
 				}
-				if(!obj.reservePhone){
+				if (!obj.reservePhone) {
 					uni.showToast({
 						title: '请输入预留人姓名',
 						icon: 'none'
 					})
 					return
 				}
-				if(!obj.reserveName){
+				if (!obj.reserveName) {
 					uni.showToast({
 						title: '请输入预留人手机',
 						icon: 'none'
@@ -479,16 +505,16 @@
 					// 	icon: 'success'
 					// })
 					this.show = false
-					this.setData.orderNo = '26151'
+					this.setData.orderNo = res.data
 					this.show3 = true
-					
+
 				})
 			},
 			onChange(val) {
 				if (this.password.length < 6) {
 					this.password += val;
 				}
-			
+
 				if (this.password.length >= 6) {
 					this.pay();
 				}
@@ -513,11 +539,22 @@
 			},
 			showPop(flag = true) {
 				this.password = '';
-				this.show = flag;
+				this.show3 = flag;
+			},
+			disabledDate(date) {
+				// let str = ''
+				// this.scheduledTime.forEach(item=>{
+					
+				// })
+				// const start = new Date('2021/4/10').getTime();
+				// const end = new Date('2021/4/18').getTime();
+				// return date.getTime() < Date.now() || date.getTime() >= start && date.getTime() <= end;
+				return date.getTime() < Date.now()
 			},
 			change1(e) {
-				this.temp.orderReserveTimeEnd = e.endDate
-				this.temp.orderReserveTimeStart = e.startDate
+				console.log(e)
+				this.temp.orderReserveTimeEnd = e[1]
+				this.temp.orderReserveTimeStart = e[0]
 				this.days = this.difference(this.temp.orderReserveTimeStart, this.temp.orderReserveTimeEnd)
 			},
 			change2(e) {
@@ -859,11 +896,12 @@
 						text-align: center;
 					}
 				}
+
 				.money {
 					font-size: 80rpx;
 					color: $u-type-warning;
 					position: relative;
-				
+
 					.close {
 						position: absolute;
 						top: 20rpx;
@@ -872,7 +910,7 @@
 						font-size: 28rpx;
 					}
 				}
-				
+
 				.tips {
 					color: $u-tips-color;
 				}
