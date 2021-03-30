@@ -470,7 +470,9 @@
 					})
 					return
 				}
-
+				obj.orderRoomId = obj.orderRoomId.toString()
+				obj.orderReserveTimeStart += ' 00:00:00'
+				obj.orderReserveTimeEnd += ' 00:00:00'
 				this.$u.api.userCreateOrde(obj).then(res => {
 					// uni.showToast({
 					// 	title: '操作成功',
