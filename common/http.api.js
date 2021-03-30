@@ -16,7 +16,7 @@ let getDefaultUrl = '/notice/get_default';
 let roomListUrl = '/room/query_page';
 let roomSearchListUrl = '/room/user_search';
 let roomDetailsUrl = '/room/';
-let userCreateOrdeUrl = 'order_table/user_create_orde';
+let userCreateOrdeUrl = '/order_table/user_create_orde';
 let payUrl = '/pay_record/pay/';
 
 //民宿列表
