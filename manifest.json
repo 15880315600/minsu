@@ -106,6 +106,9 @@
         "enable" : false
     },
     "h5" : {
-        "title" : "闽南民宿"
+        "title" : "闽南民宿",
+        "router" : {
+            "base" : "./"
+        }
     }
 }

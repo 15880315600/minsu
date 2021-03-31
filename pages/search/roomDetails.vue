@@ -492,7 +492,6 @@
 						this.listData.configurations = []
 						this.listData.roomConfigurations.map(item => {
 							this.roomConfigurationList.forEach(iten => {
-								console.log(item, iten)
 								if (item == iten.key) {
 									this.listData.configurations.push(iten.label)
 								}
@@ -509,14 +508,15 @@
 			storeDetails() {
 				let setData = {
 					id: this.listData.storeId
-					
+
 				}
 				this.$u.api.storeDetails(setData).then(res => {
 					this.storeData = res.data
 				})
 			},
 			navigation() {
-				wx.openLocation({
+				console.log(this.storeData.latitude, typeof(this.storeData.latitude))
+				uni.openLocation({
 					latitude: this.storeData.latitude, // 纬度，范围为-90~90，负数表示南纬
 					longitude: this.storeData.longitude, // 经度，范围为-180~180，负数表示西经
 					scale: 14, // 缩放比例

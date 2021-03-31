@@ -25,7 +25,7 @@
 					</view>
 				</view>
 				<view class="u-relative u-flex-1" style="margin-left: 18rpx;">
-					<u-image width="100%" height="128rpx" :src="src" border-radius="10"></u-image>
+					<u-image width="100%" height="128rpx" :src="baseUrl + item.orderImage" border-radius="10"></u-image>
 					<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
 						<u-icon name="heart" color="#008489"></u-icon>
 					</view>
@@ -35,8 +35,8 @@
 				<u-loadmore :status="status" />
 			</view>
 		</view>
-		<view v-else>
-			<u-empty mode="order" style="margin-top: 180rpx;"></u-empty>
+		<view v-else  style="margin-top: 180rpx;">
+			<u-empty mode="order"></u-empty>
 		</view>
 	</view>
 </template>
@@ -63,6 +63,13 @@
 		},
 		onLoad(e) {
 			this.current = e.current
+			if (this.current == 0) {
+				this.feachData()
+			} else {
+				this.feachData1()
+			}
+		},
+		onShow() {
 			if (this.current == 0) {
 				this.feachData()
 			} else {

@@ -15,7 +15,8 @@
 		<view class="main">
 			<view class="roomName">
 				<view class="top">
-					{{ listData.orderReserveTimeStart.split(' ')[0] }} - {{ listData.orderReserveTimeEnd.split(' ')[0] }}
+					{{ listData.orderReserveTimeStart.split(' ')[0] }} -
+					{{ listData.orderReserveTimeEnd.split(' ')[0] }}
 				</view>
 				<view class="title">
 					{{ listData.tittle }}
@@ -61,15 +62,32 @@
 				<view class="label">支付总价</view>
 				<view>{{ listData.orderPricePay }}</view>
 			</view>
-			
-			
+
+
 
 		</view>
-<!-- 		<view class="bottom u-flex u-row-right">
-			<view class="btn">
-				评价
+		<view class="bottom u-flex u-row-right"  v-if="listData.current == 1">
+			<view class="btn" @click="show = true">
+				支付
 			</view>
-		</view> -->
+		</view>
+		<u-keyboard default="" ref="uKeyboard" mode="number" :mask="true" :mask-close-able="false" :dot-enabled="false"
+			v-model="show" :safe-area-inset-bottom="true" :tooltip="false" @change="onChange" @backspace="onBackspace">
+			<view>
+				<view class="u-text-center u-padding-20 money">
+					<text>{{ listData.orderPricePay }}</text>
+					<text class="u-font-20 u-padding-left-10">元</text>
+					<view class="u-padding-10 close" data-flag="false" @tap="showPop(false)">
+						<u-icon name="close" color="#333333" size="28"></u-icon>
+					</view>
+				</view>
+				<view class="u-flex u-row-center">
+					<u-message-input mode="box" :maxlength="6" :dot-fill="true" v-model="password"
+						:disabled-keyboard="true"></u-message-input>
+				</view>
+				<view class="u-text-center u-padding-top-10 u-padding-bottom-20 tips">支付键盘</view>
+			</view>
+		</u-keyboard>
 	</view>
 </template>
 
@@ -78,7 +96,9 @@
 		data() {
 			return {
 				listQuery: {},
-				listData: {}
+				listData: {},
+				show: false,
+				password: '',
 			}
 		},
 		onLoad() {
@@ -90,6 +110,39 @@
 				uni.navigateTo({
 					url: url
 				})
+			},
+			onChange(val) {
+				if (this.password.length < 6) {
+					this.password += val;
+				}
+
+				if (this.password.length >= 6) {
+					this.pay();
+				}
+			},
+			onBackspace(e) {
+				if (this.password.length > 0) {
+					this.password = this.password.substring(0, this.password.length - 1);
+				}
+			},
+			pay() {
+				uni.showLoading({
+					title: '支付中'
+				})
+				this.$u.api.pay(this.setData).then(res => {
+					uni.hideLoading();
+					this.show = false;
+					uni.showToast({
+						icon: 'success',
+						title: '支付成功'
+					})
+				}).catch(error=>{
+					this.show = false
+				})
+			},
+			showPop(flag = true) {
+				this.password = '';
+				this.show = flag;
 			}
 		}
 	}
@@ -200,6 +253,22 @@
 			}
 		}
 
+		.money {
+			font-size: 80rpx;
+			color: $u-type-warning;
+			position: relative;
 
+			.close {
+				position: absolute;
+				top: 20rpx;
+				right: 20rpx;
+				line-height: 28rpx;
+				font-size: 28rpx;
+			}
+		}
+
+		.tips {
+			color: $u-tips-color;
+		}
 	}
 </style>
