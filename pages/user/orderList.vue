@@ -13,8 +13,8 @@
 		</view>
 		<view class="main" v-if="listData.length >0">
 			<view class="list u-flex u-row-between" v-for="item in listData" @click="jump(item)">
-				<view class="u-flex-3">
-					<view class="dese">{{ item.tittle }}</view>
+				<view class="u-flex-2">
+					<view class="dese">{{ item.orderBody }}</view>
 					<view class="checkInTime">
 						{{ item.orderReserveTimeStart.split(' ')[0] }} - {{ item.orderReserveTimeEnd.split(' ')[0] }}
 					</view>
@@ -23,9 +23,15 @@
 						<text style="color: #953c2a;font-weight: 600;" v-else>待支付</text>·
 						<text>￥{{ item.orderPricePay }}</text>
 					</view>
+					<view class="checkInTime">
+						订单号：{{ item.orderNo }}
+					</view>
+					<view class="checkInTime">
+						创建时间：{{ item.orderCreateTime }}
+					</view>
 				</view>
 				<view class="u-relative u-flex-1" style="margin-left: 18rpx;">
-					<u-image width="100%" height="128rpx" :src="baseUrl + item.orderImage" border-radius="10"></u-image>
+					<u-image width="100%" height="168rpx" :src="baseUrl + item.orderImage" border-radius="10"></u-image>
 					<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
 						<u-icon name="heart" color="#008489"></u-icon>
 					</view>
@@ -35,7 +41,7 @@
 				<u-loadmore :status="status" />
 			</view>
 		</view>
-		<view v-else  style="margin-top: 180rpx;">
+		<view v-else style="margin-top: 180rpx;">
 			<u-empty mode="order"></u-empty>
 		</view>
 	</view>
@@ -159,6 +165,13 @@
 					font-weight: 600;
 					font-size: 26rpx;
 					margin-bottom: 6rpx;
+					text-overflow: -o-ellipsis-lastline;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-line-clamp: 1;
+					line-clamp: 1;
+					-webkit-box-orient: vertical;
 				}
 
 				.checkInTime {

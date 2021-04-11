@@ -19,7 +19,7 @@
 					{{ listData.orderReserveTimeEnd.split(' ')[0] }}
 				</view>
 				<view class="title">
-					{{ listData.tittle }}
+					{{ listData.orderBody }}
 				</view>
 			</view>
 			<view class="checkInTime u-flex">
@@ -61,6 +61,10 @@
 			<view class="list">
 				<view class="label">支付总价</view>
 				<view>{{ listData.orderPricePay }}</view>
+			</view>
+			<view class="list">
+				<view class="label">创建时间</view>
+				<view>{{ listData.orderCreateTime }}</view>
 			</view>
 
 

@@ -1,18 +1,9 @@
 <template>
 	<view class="wrap">
 		<view class="roomList">
-			<view class="top">
-				<view class="title">专享优惠</view>
-				<view class="dese">新客专享低价 好房低至7折</view>
-			</view>
-			<view class="grid u-flex u-flex-wrap u-row-between" style="align-items: flex-start;">
-				<view class="main" v-for="item in listData.roomTables" @click="getOrder(item)">
-					<view class="u-relative">
-						<u-image width="100%" height="218rpx" :src="baseUrl + item.mainImage"></u-image>
-						<!-- 							<view class="u-absolute" style="right: 10rpx;top: 4rpx;color: #FFFFFF;">
-							<u-icon name="heart"></u-icon>
-						</view> -->
-					</view>
+			<view class="list">
+				<view class="main" v-for="item in listData.roomTables" @click="getOrder(item)" v-if="listData.groupRoomInfo.restRoomIds.indexOf(item.id.toString()) != -1">
+					<u-image width="100%" height="400rpx" :src="baseUrl + item.mainImage" border-radius="16"></u-image>
 					<view class="dese">
 						{{ item.roomDesc }}
 					</view>
@@ -23,13 +14,8 @@
 						<text style="font-weight: 600;">￥{{ listData.groupRoomInfo.groupPrice }}</text><text
 							style="font-size: 24rpx;">/晚</text>
 					</view>
-					<!-- 						<view class="u-flex evaluation">
-						<u-icon name="star-fill" color="#028389"></u-icon><text
-							style="font-weight: 600;">4.8</text>(29)·超赞房东
-					</view> -->
 				</view>
 			</view>
-			<u-loadmore :status="status" margin-top="8" margin-bottom="38" />
 		</view>
 	</view>
 </template>
@@ -64,7 +50,13 @@
 			feachData() {
 				console.log(this.listQuery)
 				this.$u.api.groupRoomInfoIdList(this.listQuery).then(res => {
-					this.listData = res.data
+					let listData = res.data
+					if(listData.groupRoomInfo.restRoomId){
+						listData.groupRoomInfo.restRoomIds = listData.groupRoomInfo.restRoomId.split(',')
+					}
+					
+					console.log(listData)
+					this.listData = listData
 				})
 			},
 			getOrder(row) {
@@ -74,13 +66,13 @@
 				}
 				this.$u.api.groupRoomInfoGetGroupOrder(setData).then(res => {
 					let GroupOrder = {
-						groupRoomInfo:this.listData.groupRoomInfo,
-						roomInfo:row,
-						orderNo:res.data.orderNo
+						groupRoomInfo: this.listData.groupRoomInfo,
+						roomInfo: row,
+						orderNo: res.data.orderNo
 					}
 					uni.setStorageSync("GroupOrder", JSON.stringify(GroupOrder))
 					uni.navigateTo({
-						url:'./roomDetails'
+						url: './roomDetails'
 					})
 					console.log(setData)
 				})
@@ -91,49 +83,39 @@
 
 <style lang="scss" scoped>
 	.wrap {
-		padding: 0 28rpx;
-
 		.roomList {
-			.top {
-				.title {
-					margin-top: 48rpx;
-					font-size: 36rpx;
-					font-weight: 600;
-				}
+			margin: 0 28rpx;
 
-				.dese {
-					line-height: 80rpx;
-					font-weight: 500;
-				}
+			.title {
+				line-height: 148rpx;
+				font-size: 38rpx;
+				font-weight: 600;
 			}
 
-			.grid {
-
+			.list {
 				.main {
-					width: 49%;
-					margin-bottom: 28rpx;
+					margin-bottom: 48rpx;
 
 					.dese {
 						margin-top: 18rpx;
-						color: #997a64;
-						font-size: 18rpx;
-						line-height: 40rpx;
+						font-size: 20rpx;
+						line-height: 48rpx;
 					}
 
 					.roomName {
 						font-size: 26rpx;
+						font-weight: 600;
 					}
 
 					.price {
 						line-height: 48rpx;
 					}
 
-					.evaluation {
-						line-height: 48rpx;
+					.time {
 						font-size: 24rpx;
-						color: #999999;
 					}
 				}
+
 			}
 		}
 	}

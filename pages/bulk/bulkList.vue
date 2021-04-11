@@ -20,6 +20,9 @@
 					<view class="time">
 						预定时间：{{ item.groupStartDate | dateFormat }} - {{ item.groupEndDate | dateFormat }}
 					</view>
+					<view class="time">
+						可预订房间数：{{ item.restRoomIds.length }} / {{ item.roomNum }}
+					</view>
 				</view>
 				<view style="padding: 28rpx 0;">
 					<u-loadmore :status="status" />
@@ -73,7 +76,14 @@
 		methods: {
 			feachData() {
 				this.$u.api.groupRoomInfoList(this.listQuery).then(res => {
-					this.listData = res.data.records
+					let listData = res.data.records
+					this.listData = listData.map(item => {
+						return {
+							...item,
+							restRoomIds: item.restRoomId.split(',')
+						}
+					})
+					console.log(this.listData.length)
 					this.total = res.data.total
 					if (this.total <= 10) {
 						this.status = 'nomore';
