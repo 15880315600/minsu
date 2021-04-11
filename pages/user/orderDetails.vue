@@ -8,7 +8,7 @@
 			<view class="u-absolute sta" v-if="listData.current == 1">
 				订单未支付
 			</view>
-			<view class="topBack u-absolute" @click="jump('./orderList')">
+			<view class="topBack u-absolute" @click="jump()">
 				<u-icon name="arrow-leftward" color="#ffffff" size="38"></u-icon>
 			</view>
 		</view>
@@ -108,7 +108,7 @@
 		methods: {
 			jump(url) {
 				uni.navigateTo({
-					url: url
+					url: './orderList?current=' + this.listData.current
 				})
 			},
 			onChange(val) {
