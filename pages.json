@@ -73,6 +73,19 @@
 				"navigationBarTitleText": "民宿详情",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/bulk/bulkDetails",
+			"style": {
+				"navigationBarTitleText": "团购详情"
+			}
+		},
+		{
+			"path": "pages/bulk/roomDetails",
+			"style": {
+				"navigationBarTitleText": "团购房间详情",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {

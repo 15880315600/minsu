@@ -20,7 +20,10 @@ let userCreateOrdeUrl = '/order_table/user_create_order';
 let payUrl = '/order_table/pay/';
 let selectByDateUrl = '/room_reserve_record/select_by_date';
 let storeDetailsUrl = '/store/';
-let groupRoomInfoListUrl = 'room/user_query_page';
+let groupRoomInfoListUrl = '/group_room_info/query_page';
+let groupRoomInfoIdListUrl = '/group_room_info/';
+let groupRoomInfoGetGroupOrderUrl = '/group_room_info/get_group_order';
+let userCreateOrdeGroupUrl = '/order_table/pay_group';
 //民宿列表
 //订单
 let myWaitPayUrl = '/order_table/my_wait_pay';
@@ -52,6 +55,9 @@ const install = (Vue, vm) => {
 	let selectByDate = (params = {}) => vm.$u.get(selectByDateUrl, params);
 	let storeDetails = (params = {}) => vm.$u.get(storeDetailsUrl + params.id);
 	let groupRoomInfoList = (params = {}) => vm.$u.get(groupRoomInfoListUrl, params);
+	let groupRoomInfoIdList = (params = {}) => vm.$u.get(groupRoomInfoIdListUrl + params.id);
+	let groupRoomInfoGetGroupOrder = (params = {}) => vm.$u.get(groupRoomInfoGetGroupOrderUrl, params);
+	let userCreateOrdeGroup = (params = {}) => vm.$u.post(userCreateOrdeGroupUrl, params);
 	
 	//民宿列表
 	
@@ -77,7 +83,10 @@ const install = (Vue, vm) => {
 		userPay,
 		selectByDate,
 		storeDetails,
-		groupRoomInfoList
+		groupRoomInfoList,
+		groupRoomInfoIdList,
+		groupRoomInfoGetGroupOrder,
+		userCreateOrdeGroup
 	};
 }
 
