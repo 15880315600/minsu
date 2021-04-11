@@ -18,6 +18,13 @@
 			}
 		},
 		{
+			"path": "pages/bulk/bulkList",
+			"style": {
+				"navigationBarTitleText": "团购",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -85,6 +92,12 @@
 			// 	"selectedIconPath": "/static/img/tabBar/wish_active.png",
 			// 	"text": "心愿单"
 			// },
+			{
+				"pagePath": "pages/bulk/bulkList",
+				"iconPath": "/static/img/tabBar/bulk.png",
+				"selectedIconPath": "/static/img/tabBar/bulk_active.png",
+				"text": "心愿单"
+			},
 			{
 				"pagePath": "pages/user/user",
 				"iconPath": "static/img/tabBar/user.png",

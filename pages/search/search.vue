@@ -75,7 +75,7 @@
 					<view class="title">专享优惠</view>
 					<view class="dese">新客专享低价 好房低至7折</view>
 				</view>
-				<view class="grid u-flex u-flex-wrap u-row-between">
+				<view class="grid u-flex u-flex-wrap u-row-between" style="align-items: flex-start;">
 					<view class="main" v-for="item in listData" @click="jump('./roomDetails?id=' + item.id)">
 						<view class="u-relative">
 							<u-image width="100%" height="218rpx" :src="baseUrl + item.mainImage"></u-image>
